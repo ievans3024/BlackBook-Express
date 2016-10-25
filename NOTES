@@ -1,0 +1,79 @@
+Models
+
+Group
+
+    properties:
+        id                  // String
+        datetime_created    // Date
+        datetime_modified   // Date
+        name                // String
+        description         // String
+        permissions         // Array of String
+        groups              // Array of Group
+
+    methods:
+        has_permission(permissions)
+            permissions: String or Array of String
+
+
+Contact:
+
+    properties:
+        datetime_created    // Date
+        datetime_modified   // Date
+        user_id             // String
+        user_revision       // String
+        name_first          // String
+        name_last           // String
+        emails              // Array of Object
+            label
+            email
+        phone_numbers       // Array of Object
+            label
+            number
+        addresses           // Array of Object
+            label
+            street
+            apt
+            company
+            city
+            locality
+            post_code
+            country
+
+
+User
+
+    properties:
+        id                  // String
+        datetime_created    // Date
+        datetime_modified   // Date
+        display_name        // String
+        account_email       // String
+        contact_info        // Contact
+        contacts            // Array of Contact
+        permissions         // Array of String
+        groups              // Array of Group
+        password_hash       // String
+
+
+Session
+
+    properties:
+        id                  // String
+        datetime_created    // Date
+        expiry              // Date
+
+
+
+Requirements
+
+    - The entries at index 0 for Contact.emails, Contact.phone_numbers
+      and Contact.addresses are considered the "default" for that Contact.
+      The application should swap out the ordering when a User changes
+      default contact information for a Contact.
+
+    - When a User adds another User to their list of Contacts, the target User's
+      contact_info should be copied, not referenced. If the target user changes
+      their contact info later, the application should offer to update contact list
+      entries for relevant users next time they view that contact.

@@ -1,3 +1,17 @@
+Routes
+
+all api routes serve collection+json hypermedia format by default.
+more mimetypes will be supported in the future with Accept headers.
+
+/api/
+/api/contact/
+/api/contact/<id>/
+/api/group/
+/api/group/<id>/
+/api/session/
+/api/user/
+/api/user/<id>/
+
 Models
 
 Group

@@ -3,38 +3,61 @@
 class CollectionArray extends Array {
 
   constructor (...args) {
+
     let contains = args.slice(0,1)[0],
       super_args = args.slice(1);
+
     super(...super_args);
+
     if (typeof contains !== 'function') {
+
       throw new Error('Argument "contains" must be a function.');
+
     } else {
+
       this.contains = contains;
+
     }
+
   }
 
   validate_content (object) {
+
     if (object instanceof this.contains) {
+
       return object
+
     } else {
+
       return this.contains(object);
+
     }
+
   }
 
   push () {
+
     let args = arguments.map(this.validate_content);
+
     return super.push(...args);
+
   }
 
   unshift () {
+
     let args = arguments.map(this.validate_content);
+
     return super.unshift(...args);
+
   }
 
   splice () {
+
     let items = arguments.slice(2).map(this.validate_content),
       args = arguments.slice(0,2) + items;
+
     return super.splice(...args);
+
   }
 
 }
@@ -46,7 +69,9 @@ class CollectionObject {
     let property;
 
     if (typeof data === 'string') {
+
       data = JSON.parse(data);
+
     }
 
     // validate contents
@@ -54,16 +79,13 @@ class CollectionObject {
 
     // set properties from data
     for (property in data) {
-      if (data.hasOwnProperty(property)) {
-        this[property] = data[property];
-      }
-    }
 
-    // add properties that were not set before as new empty properties
-    for (property in this.property_rules) {
-      if (this.property_rules.hasOwnProperty(property) && !this.hasOwnProperty(property)) {
-        this[property] = new this.property_rules[property]['type']();
+      if (data.hasOwnProperty(property)) {
+
+        this[property] = data[property];
+
       }
+
     }
 
   }
@@ -74,36 +96,65 @@ class CollectionObject {
         rule;
 
     for (rule in this.property_rules) {
+
       if (this.property_rules.hasOwnProperty(rule)) {
+
         r = this.property_rules[rule];
+
         if (r.hasOwnProperty('required') && (object === undefined || !object.hasOwnProperty(rule))) {
+
           throw new Error('Missing required property: ' + rule);
+
         } else if (object !== undefined){
+
           if(object.hasOwnProperty(rule)) {
+
             if (r.hasOwnProperty('type')) {
+
               if (r.type === Array) {
+
                 collection[rule] = object[rule].map(
                   function (value) {
+
                     if (r.hasOwnProperty('contents')) {
+
                       if (!(value instanceof r.contents)) {
+
                         return new r.contents(value);
+
                       } else {
+
                         return value;
+
                       }
+
                     } else {
+
                       return value;
+
                     }
+
                   }
-                )
+                );
+
               } else if (!object[rule] instanceof r.type) {
+
                 collection[rule] = new r.type(object[rule]);
+
               } else {
+
                 collection[rule] = object[rule];
+
               }
+
             }
+
           }
+
         }
+
       }
+
     }
 
     return collection;
@@ -111,7 +162,9 @@ class CollectionObject {
   }
 
   toString () {
+
     return JSON.stringify(this);
+
   }
 
   get_data (name) {
@@ -331,6 +384,32 @@ class Template extends CollectionObject {
 
 class Collection extends CollectionObject {
 
+  constructor (data) {
+
+    let property,
+        skip_properties = ['error', 'template'];
+
+    super(data);
+
+    // add properties that were not set before as new empty properties
+    for (property in this.property_rules) {
+
+      if (
+
+        this.property_rules.hasOwnProperty(property) &&
+        !skip_properties.includes(property) &&
+        !this.hasOwnProperty(property)
+
+      ) {
+
+        this[property] = new this.property_rules[property]['type']();
+
+      }
+
+    }
+
+  }
+
   get property_rules () {
 
     return {
@@ -346,7 +425,9 @@ class Collection extends CollectionObject {
   }
 
   toString () {
+
     return JSON.stringify({collection: this});
+
   }
 
 }

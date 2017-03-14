@@ -15,6 +15,47 @@ Group
         has_permission(permissions)
             permissions: String or Array of String
 
+Group {
+  id: "123456"
+  datetime_created: "Tuesday, March 14, 2017 12:00AM"
+  datetime_modified: "Tuesday, March 14, 2017 5:00AM"
+  name: "Admins"
+  description: "Site administrators"
+  permissions: [
+    "blackbook.user.all.edit",
+    "blackbook.user.create",
+    "blackbook.user.all.delete",
+    "blackbook.user.all.read",
+    "blackbook.user.all.contacts.edit",
+    "blackbook.user.all.contacts.create",
+    "blackbook.user.all.contacts.delete",
+    "blackbook.user.all.contacts.read",
+    "blackbook.user.all.permissions.edit",
+    "blackbook.group.read",
+    "blackbook.group.create",
+    "blackbook.group.edit",
+    "blackbook.group.delete"
+  ],
+  groups: [
+    Group {
+      id: "012345",
+      datetime_create: "Monday, March 13, 2017 12:00AM",
+      datetime_modified: "Monday, March 13, 2017 5:00AM",
+      name: "Users",
+      description: "General site users",
+      permissions: [
+        "blackbook.user.self.edit",
+        "blackbook.user.self.delete",
+        "blackbook.user.self.read",
+        "blackbook.user.self.contacts.read",
+        "blackbook.user.self.contacts.create",
+        "blackbook.user.self.contacts.edit",
+        "blackbook.user.self.contacts.delete"
+      ]
+    }
+  ]
+}
+
 
 Contact:
 
@@ -33,14 +74,64 @@ Contact:
             number
         addresses           // Array of Object
             label
+            company
             street
             apt
-            company
             city
             locality
             post_code
             country
 
+Contact {
+  datetime_created: "Wednesday, March 15 2017 12:00AM",
+  datetime_modified: "Wednesday, March 15 2017 5:00AM",
+  user_id: "123456",
+  user_revision: "234567",
+  name_first: "Joe",
+  name_last: "Schmoe",
+  emails: [
+    {
+      label: "Primary",
+      email: "coolstorybro@example.com"
+    },
+    {
+      label: "Work",
+      email: "joe.schmoe@example.com"
+    }
+  ],
+  phone_numbers: [
+    {
+      label: "Home",
+      number: "555-555-1234"
+    },
+    {
+      label: "Cell",
+      number: "555-555-4321"
+    }
+  ],
+  addresses: [
+    {
+      label: "Home",
+      company: "",
+      street: "123 Example Dr.",
+      apt: "",
+      city: "Exampleton",
+      locality: "EX",
+      post_code: "12345",
+      country: "Federal Republic of Examplaria"
+    },
+    {
+      label: "Work",
+      company: "Example, Inc.",
+      street: "456 Example Way",
+      apt: "Suite 789",
+      city: "Exampleton",
+      locality: "EX",
+      post_code: "12356",
+      country: "Federal Republic of Examplaria"
+    }
+  ]
+}
 
 User
 
@@ -61,6 +152,8 @@ Session
 
     properties:
         id                  // String
+        signature           // String -- session id + user id + configured secret salt hashed sha512
+        user                // String
         datetime_created    // Date
         expiry              // Date
 

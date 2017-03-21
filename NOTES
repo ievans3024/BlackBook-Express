@@ -166,7 +166,7 @@ Session
 
     properties:
         id                  // String
-        signature           // String -- session id + user id + configured secret salt hashed sha512
+        signature           // String -- (session id + user id + configured secret salt) hashed sha512
         user                // String
         datetime_created    // Date
         expiry              // Date
@@ -181,6 +181,4 @@ Requirements
       default contact information for a Contact.
 
     - When a User adds another User to their list of Contacts, the target User's
-      contact_info should be copied, not referenced. If the target user changes
-      their contact info later, the application should offer to update contact list
-      entries for relevant users next time they view that contact.
+      Contact info is referenced.

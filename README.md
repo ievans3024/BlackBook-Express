@@ -21,7 +21,7 @@ Requirements
 ------------
 
 * NodeJS
-* CouchDB
+* PostgreSQL or other SQL database
 
 
 Installation/Usage
